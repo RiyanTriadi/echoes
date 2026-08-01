@@ -12,6 +12,9 @@
   body {
     @apply bg-stone-50 text-stone-800 dark:bg-slate-950 dark:text-slate-100 antialiased transition-colors duration-300;
   }
+  button, [role="button"] {
+    @apply cursor-pointer;
+  }
 }
 
 /* Custom Scrollbar Styles */

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { X, Shield, Type } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface SettingsModalProps {
+  isOpen: boolean;
   onClose: () => void;
   onPinChange: (newPin: string | null) => void;
   currentFont: string;
   onFontChange: (newFont: string) => void;
 }
 
-export function SettingsModal({ onClose, onPinChange, currentFont, onFontChange }: SettingsModalProps) {
+export function SettingsModal({ isOpen, onClose, onPinChange, currentFont, onFontChange }: SettingsModalProps) {
   const currentPin = localStorage.getItem('echoes_pin');
   const [pin, setPin] = useState(currentPin || '');
   const [message, setMessage] = useState('');
@@ -43,8 +45,15 @@ export function SettingsModal({ onClose, onPinChange, currentFont, onFontChange 
   ];
 
   return (
-    <div className="fixed inset-0 bg-stone-900/40 dark:bg-slate-950/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-stone-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh]">
+    <div className={cn(
+      "fixed inset-0 flex items-center justify-center z-50 p-4 transition-all duration-300",
+      isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+    )}>
+      <div className="absolute inset-0 bg-stone-900/40 dark:bg-slate-950/60 backdrop-blur-sm" onClick={onClose}></div>
+      <div className={cn(
+        "relative bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-stone-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] transition-all duration-300",
+        isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+      )}>
         <div className="flex items-center justify-between p-4 border-b border-stone-100 dark:border-slate-800/60 shrink-0">
           <h2 className="font-semibold text-stone-800 dark:text-slate-100 flex items-center gap-2">
             Settings

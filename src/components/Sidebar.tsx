@@ -45,7 +45,7 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
         {isOpen && <span className="font-semibold text-stone-800 dark:text-slate-100 text-lg flex items-center gap-2"><Book size={18} className="text-stone-700 dark:text-indigo-400" /> Echoes</span>}
         <button
           onClick={onToggle}
-          className="p-1 hover:bg-stone-200 dark:hover:bg-slate-800 rounded-md text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-100 transition-colors"
+          className="p-1.5 hover:bg-stone-200 dark:hover:bg-slate-800 rounded-lg text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-100 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
         >
           {isOpen ? <ChevronLeft size={20} /> : <Book size={20} className="text-stone-700 dark:text-indigo-400" />}
         </button>
@@ -54,9 +54,12 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
       <div className="flex-1 flex flex-col overflow-hidden p-3">
         <div className="flex gap-2 mb-4 mt-2 shrink-0">
           <button 
-            onClick={onNewEntry}
+            onClick={() => {
+              onNewEntry();
+              if (!isOpen) onToggle();
+            }}
             className={cn(
-              "flex-1 flex items-center gap-2 p-2.5 rounded-lg bg-stone-800 dark:bg-indigo-600/90 hover:bg-stone-700 dark:hover:bg-indigo-500 text-stone-50 dark:text-white transition-all shadow-sm dark:shadow-md dark:shadow-indigo-900/20",
+              "flex-1 flex items-center gap-2 p-2.5 rounded-lg bg-stone-800 dark:bg-indigo-600/90 hover:bg-stone-700 dark:hover:bg-indigo-500 text-stone-50 dark:text-white transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95",
               !isOpen && "justify-center"
             )}
             title="New Entry"
@@ -69,7 +72,7 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
             <button 
               onClick={() => onSelectEntry({ id: 'dashboard', title: '', content: '', date: '' })}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-stone-100 dark:bg-slate-800 hover:bg-stone-200 dark:hover:bg-slate-700 text-stone-700 dark:text-slate-200 transition-all border border-stone-200 dark:border-slate-700/50",
+                "flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-stone-100 dark:bg-slate-800 hover:bg-stone-200 dark:hover:bg-slate-700 text-stone-700 dark:text-slate-200 transition-all border border-stone-200 dark:border-slate-700/50 hover:-translate-y-0.5 active:scale-95",
                 activeEntryId === 'dashboard' && "bg-stone-200 dark:bg-slate-700 border-stone-300 dark:border-slate-600 font-medium"
               )}
             >
@@ -108,7 +111,7 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
                 key={entry.id} 
                 onClick={() => onSelectEntry(entry)}
                 className={cn(
-                  "w-full text-left p-3 rounded-lg transition-all truncate flex flex-col border",
+                  "w-full text-left p-3 rounded-lg transition-all duration-300 hover:-translate-y-0.5 truncate flex flex-col border",
                   activeEntryId === entry.id 
                     ? "bg-white dark:bg-slate-800 border-stone-200 dark:border-slate-700 text-stone-900 dark:text-slate-100 shadow-sm" 
                     : "border-transparent hover:bg-stone-200/50 dark:hover:bg-slate-800/50 text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200"
@@ -139,7 +142,7 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
         <button 
           onClick={toggleTheme}
           className={cn(
-            "w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-stone-200 dark:hover:bg-slate-800 text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200 transition-colors",
+            "w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-stone-200 dark:hover:bg-slate-800 text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200 transition-all duration-300 hover:-translate-y-0.5",
             !isOpen && "justify-center"
           )}
         >
@@ -150,10 +153,10 @@ export function Sidebar({ isOpen, onToggle, entries, activeEntryId, onSelectEntr
         <button 
           onClick={onOpenSettings}
           className={cn(
-          "w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-stone-200 dark:hover:bg-slate-800 text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200 transition-colors",
-          !isOpen && "justify-center"
-        )}>
-          <Settings size={18} />
+            "w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-stone-200 dark:hover:bg-slate-800 text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200 transition-all duration-300 hover:-translate-y-0.5",
+            !isOpen && "justify-center"
+          )}>
+          <Settings size={18} className="group-hover:rotate-45 transition-transform duration-500" />
           {isOpen && <span className="font-medium">Settings</span>}
         </button>
       </div>

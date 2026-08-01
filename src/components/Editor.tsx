@@ -39,6 +39,7 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
     content,
     editorProps: {
       attributes: {
+        spellcheck: 'false',
         class: `prose prose-stone dark:prose-slate dark:prose-invert max-w-none focus:outline-none min-h-[500px] ${fontClass} prose-p:leading-loose prose-headings:${fontClass} prose-p:text-stone-700 dark:prose-p:text-slate-300 prose-headings:text-stone-900 dark:prose-headings:text-slate-100 prose-a:text-stone-600 dark:prose-a:text-indigo-400 prose-strong:text-stone-900 dark:prose-strong:text-slate-200 prose-blockquote:border-l-4 prose-blockquote:border-indigo-400 dark:prose-blockquote:border-indigo-500 prose-blockquote:bg-stone-50 dark:prose-blockquote:bg-slate-800/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:font-normal prose-blockquote:not-italic prose-li:text-stone-700 dark:prose-li:text-slate-300 text-[17px] mark:bg-amber-200 dark:mark:bg-amber-500/40 dark:mark:text-slate-100`,
       },
     },
@@ -53,6 +54,7 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
       editor.setOptions({
         editorProps: {
           attributes: {
+            spellcheck: 'false',
             class: `prose prose-stone dark:prose-slate dark:prose-invert max-w-none focus:outline-none min-h-[500px] ${fontClass} prose-p:leading-loose prose-headings:${fontClass} prose-p:text-stone-700 dark:prose-p:text-slate-300 prose-headings:text-stone-900 dark:prose-headings:text-slate-100 prose-a:text-stone-600 dark:prose-a:text-indigo-400 prose-strong:text-stone-900 dark:prose-strong:text-slate-200 prose-blockquote:border-l-4 prose-blockquote:border-indigo-400 dark:prose-blockquote:border-indigo-500 prose-blockquote:bg-stone-50 dark:prose-blockquote:bg-slate-800/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:font-normal prose-blockquote:not-italic prose-li:text-stone-700 dark:prose-li:text-slate-300 text-[17px] mark:bg-amber-200 dark:mark:bg-amber-500/40 dark:mark:text-slate-100`,
           }
         }
@@ -84,21 +86,21 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
         <div className="sticky top-0 z-40 bg-stone-50/90 dark:bg-slate-950/90 backdrop-blur-md pb-4 pt-2 mb-4 border-b border-stone-200/50 dark:border-slate-800/50 flex items-center gap-1 flex-wrap">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('bold') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('bold') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Bold"
           >
             <Bold size={16} />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('italic') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('italic') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Italic"
           >
             <Italic size={16} />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('strike') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('strike') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Strikethrough"
           >
             <Strikethrough size={16} />
@@ -106,7 +108,7 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
           
           <button
             onClick={() => editor.chain().focus().toggleHighlight().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('highlight') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('highlight') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Highlight"
           >
             <Highlighter size={16} />
@@ -116,21 +118,21 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
           
           <button
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('heading', { level: 1 }) ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('heading', { level: 1 }) ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Heading 1"
           >
             <Heading1 size={16} />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('heading', { level: 2 }) ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('heading', { level: 2 }) ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Heading 2"
           >
             <Heading2 size={16} />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('blockquote') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('blockquote') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Blockquote"
           >
             <Quote size={16} />
@@ -140,7 +142,7 @@ export function Editor({ content, onChange, fontClass }: EditorProps) {
           
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded-lg transition-all cursor-pointer ${editor.isActive('bulletList') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
+            className={`p-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${editor.isActive('bulletList') ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold' : 'text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200'}`}
             title="Bullet List"
           >
             <List size={16} />

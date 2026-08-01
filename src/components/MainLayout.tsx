@@ -9,12 +9,11 @@ interface MainLayoutProps {
   activeEntryId: string | null;
   onSelectEntry: (entry: JournalEntry) => void;
   onNewEntry: (date?: string) => void;
-  isDirty?: boolean;
   onOpenSettings?: () => void;
   isZenMode: boolean;
 }
 
-export function MainLayout({ children, entries, activeEntryId, onSelectEntry, onNewEntry, isDirty, onOpenSettings, isZenMode }: MainLayoutProps) {
+export function MainLayout({ children, entries, activeEntryId, onSelectEntry, onNewEntry, onOpenSettings, isZenMode }: MainLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -49,7 +48,12 @@ export function MainLayout({ children, entries, activeEntryId, onSelectEntry, on
 
   return (
     <div className="flex h-screen bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100 overflow-hidden">
-      {!isZenMode && (
+      <div 
+        className={cn(
+          "h-full shrink-0 transition-[width,opacity,margin] duration-500 ease-in-out overflow-hidden",
+          isZenMode ? "w-0 opacity-0 -ml-1" : (isSidebarOpen ? "w-72 opacity-100" : "w-16 opacity-100")
+        )}
+      >
         <Sidebar
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -61,11 +65,8 @@ export function MainLayout({ children, entries, activeEntryId, onSelectEntry, on
           toggleTheme={toggleTheme}
           onOpenSettings={onOpenSettings}
         />
-      )}
-      <main className={cn(
-        "flex-1 flex flex-col relative transition-all overflow-hidden bg-stone-50 dark:bg-slate-950",
-        isZenMode ? "w-full" : ""
-      )}>
+      </div>
+      <main className="flex-1 flex flex-col relative transition-all duration-500 overflow-hidden bg-stone-50 dark:bg-slate-950">
         {children}
       </main>
     </div>

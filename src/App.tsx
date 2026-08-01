@@ -1,19 +1,26 @@
 import { useState, useEffect } from "react";
 import { MainLayout } from "./components/MainLayout";
 import { Editor } from "./components/Editor";
-import { getEntries, saveEntry } from "./services/storage";
+import { getEntries, saveEntry, deleteEntry } from "./services/storage";
 import type { JournalEntry } from "./types";
-import { Save, Sparkles, Tag as TagIcon, Maximize2, Minimize2 } from 'lucide-react';
+import { Save, Sparkles, Tag as TagIcon, Maximize2, Minimize2, Trash2 } from 'lucide-react';
 import { SettingsModal } from "./components/SettingsModal";
 import { LockScreen } from "./components/LockScreen";
 import { Dashboard } from "./components/Dashboard";
+import { ConfirmModal } from "./components/ConfirmModal";
 import { getRandomPrompt } from "./lib/prompts";
+
 
 const MOODS = [
   { label: 'Happy', emoji: '😊', activeClass: 'border-amber-400 dark:border-amber-500 bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-amber-300 dark:hover:border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-500/10' },
   { label: 'Calm', emoji: '😌', activeClass: 'border-teal-400 dark:border-teal-500 bg-teal-50 dark:bg-teal-500/20 text-teal-700 dark:text-teal-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-teal-300 dark:hover:border-teal-500/50 hover:bg-teal-50 dark:hover:bg-teal-500/10' },
   { label: 'Reflective', emoji: '🤔', activeClass: 'border-indigo-400 dark:border-indigo-500 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-50 dark:hover:bg-indigo-500/10' },
   { label: 'Sad', emoji: '😔', activeClass: 'border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-500/50 hover:bg-blue-50 dark:hover:bg-blue-500/10' },
+  { label: 'Angry', emoji: '😠', activeClass: 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-red-300 dark:hover:border-red-500/50 hover:bg-red-50 dark:hover:bg-red-500/10' },
+  { label: 'Anxious', emoji: '😰', activeClass: 'border-violet-400 dark:border-violet-500 bg-violet-50 dark:bg-violet-500/20 text-violet-700 dark:text-violet-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-violet-300 dark:hover:border-violet-500/50 hover:bg-violet-50 dark:hover:bg-violet-500/10' },
+  { label: 'Excited', emoji: '🤩', activeClass: 'border-orange-400 dark:border-orange-500 bg-orange-50 dark:bg-orange-500/20 text-orange-700 dark:text-orange-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-orange-300 dark:hover:border-orange-500/50 hover:bg-orange-50 dark:hover:bg-orange-500/10' },
+  { label: 'Tired', emoji: '🥱', activeClass: 'border-zinc-400 dark:border-zinc-500 bg-zinc-50 dark:bg-zinc-500/20 text-zinc-700 dark:text-zinc-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-zinc-300 dark:hover:border-zinc-500/50 hover:bg-zinc-50 dark:hover:bg-zinc-500/10' },
+  { label: 'Grateful', emoji: '🙏', activeClass: 'border-pink-400 dark:border-pink-500 bg-pink-50 dark:bg-pink-500/20 text-pink-700 dark:text-pink-200', baseClass: 'border-stone-200 dark:border-slate-800 text-stone-500 dark:text-slate-400 hover:border-pink-300 dark:hover:border-pink-500/50 hover:bg-pink-50 dark:hover:bg-pink-500/10' },
 ];
 
 function App() {
@@ -35,6 +42,7 @@ function App() {
   const [isZenMode, setIsZenMode] = useState(false);
   const [editorFont, setEditorFont] = useState('font-serif');
   const [tempDate, setTempDate] = useState<string | null>(null);
+  const [entryToDelete, setEntryToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     const pin = localStorage.getItem('echoes_pin');
@@ -139,6 +147,24 @@ function App() {
     }
   };
 
+  const handleDelete = () => {
+    if (!activeEntryId || activeEntryId === 'dashboard') return;
+    setEntryToDelete(activeEntryId);
+  };
+
+  const confirmDelete = async () => {
+    if (!entryToDelete) return;
+    try {
+      await deleteEntry(entryToDelete);
+      setEntries(prev => prev.filter(e => e.id !== entryToDelete));
+      setActiveEntryId('dashboard');
+    } catch (err) {
+      console.error("Failed to delete entry:", err);
+    } finally {
+      setEntryToDelete(null);
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -191,7 +217,6 @@ function App() {
         activeEntryId={activeEntryId} 
         onSelectEntry={handleSelectEntry} 
         onNewEntry={createNewEntry} 
-        isDirty={isDirty}
         onOpenSettings={() => setIsSettingsOpen(true)}
         isZenMode={isZenMode}
       >
@@ -204,6 +229,14 @@ function App() {
         ) : (
           <div className="max-w-4xl mx-auto py-12 md:py-16 px-6 md:px-12 flex flex-col h-full relative animate-in fade-in duration-300 w-full">
             <div className={`absolute top-6 right-8 flex items-center gap-3 z-10 transition-opacity duration-300 ${isZenMode ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+              <button
+                onClick={handleDelete}
+                className="p-2 rounded-full bg-stone-100 dark:bg-slate-800 text-stone-500 dark:text-slate-400 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
+                title="Delete Entry"
+              >
+                <Trash2 size={18} />
+              </button>
+              
               <button
                 onClick={() => setIsZenMode(!isZenMode)}
                 className={`p-2 rounded-lg transition-colors ${
@@ -229,7 +262,7 @@ function App() {
               </button>
             </div>
 
-            <div className={`mb-6 mt-4 transition-all duration-500 shrink-0 ${isZenMode ? 'opacity-0 h-0 overflow-hidden mb-0 mt-0' : 'opacity-100'}`}>
+            <div className={`mb-6 mt-4 transition-all duration-500 shrink-0 ${isZenMode ? 'opacity-0 h-0 overflow-hidden hidden mb-0 mt-0' : 'opacity-100'}`}>
               <p className="text-stone-400 dark:text-slate-500 text-sm tracking-widest uppercase mb-4 font-medium">
                 {handleDate(currentSavedEntry?.date || tempDate || undefined)}
               </p>
@@ -272,7 +305,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 {MOODS.map(m => (
                   <button
                     key={m.label}
@@ -308,14 +341,21 @@ function App() {
         )}
       </MainLayout>
 
-      {isSettingsOpen && (
-        <SettingsModal 
-          onClose={() => setIsSettingsOpen(false)} 
-          onPinChange={(newPin) => setSavedPin(newPin)}
-          currentFont={editorFont}
-          onFontChange={setEditorFont}
-        />
-      )}
+      <SettingsModal 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)} 
+        onPinChange={(newPin) => setSavedPin(newPin)}
+        currentFont={editorFont}
+        onFontChange={setEditorFont}
+      />
+
+      <ConfirmModal
+        isOpen={!!entryToDelete}
+        title="Delete Journal Entry"
+        message="Are you sure you want to delete this entry? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setEntryToDelete(null)}
+      />
     </>
   );
 }
