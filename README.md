@@ -1,32 +1,87 @@
-# React + TypeScript + Vite
+# Echoes
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Echoes adalah aplikasi jurnal pribadi untuk menulis, menyimpan, dan meninjau kembali catatan harian. Aplikasi tersedia sebagai web app berbasis Vite dan aplikasi desktop berbasis Tauri.
 
-Currently, two official plugins are available:
+## Fitur
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Membuat, mengedit, memilih, dan menghapus entry jurnal.
+- Rich text editor berbasis Tiptap: bold, italic, strikethrough, highlight, heading, quote, daftar, dan gambar.
+- Metadata entry berupa mood dan tag.
+- Dashboard dengan jumlah entry, jumlah kata, current streak, longest streak, dan kalender aktivitas.
+- Media Gallery untuk gambar yang ada di entry.
+- Inspirasi prompt untuk membantu memulai tulisan.
+- Zen mode untuk menulis dengan gangguan minimal.
+- PIN 4 digit untuk mengunci jurnal saat aplikasi dibuka.
+- Pilihan font serif, sans-serif, atau monospace.
+- Shortcut `Ctrl+S` atau `Cmd+S` untuk menyimpan entry dan `Escape` untuk keluar dari zen mode.
 
-## React Compiler
+## Teknologi
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 dan TypeScript
+- Vite
+- Tauri 2 dan Rust
+- Tiptap
+- Tailwind CSS 4
+- lucide-react
 
-## Expanding the Oxlint configuration
+## Menjalankan Secara Lokal
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Prasyarat:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- Node.js dan npm
+- Rust toolchain jika ingin menjalankan aplikasi Tauri
+
+Instal dependensi:
+
+```bash
+npm install
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Jalankan versi browser:
+
+```bash
+npm run dev
+```
+
+Buka `http://localhost:5173` di browser.
+
+Jalankan versi desktop Tauri:
+
+```bash
+npm run tauri dev
+```
+
+## Perintah NPM
+
+| Perintah | Kegunaan |
+| --- | --- |
+| `npm run dev` | Menjalankan Vite development server |
+| `npm run build` | Type-check dan membuat build production frontend |
+| `npm run lint` | Menjalankan Oxlint |
+| `npm run preview` | Menyajikan hasil build secara lokal |
+| `npm run tauri dev` | Menjalankan aplikasi desktop Tauri |
+| `npm run tauri build` | Membuat paket aplikasi Tauri |
+
+## Penyimpanan Data
+
+Echoes tidak memakai backend atau cloud sync.
+
+- Saat berjalan di browser, entry disimpan di `localStorage` dengan key `echoes_entries`.
+- Saat berjalan sebagai aplikasi Tauri, entry disimpan di AppData pada `EchoesData/entries.json`.
+- PIN disimpan di `localStorage` dengan key `echoes_pin`.
+- Preferensi font disimpan di `localStorage` dengan key `echoes_font`.
+
+Konten editor disimpan sebagai HTML. Gambar yang ditambahkan melalui editor disimpan sebagai Data URL/base64 di dalam HTML entry, sehingga ukuran data dapat bertambah cukup besar.
+
+## Struktur Proyek
+
+- `src/App.tsx`: state dan alur utama aplikasi.
+- `src/components/`: layout, sidebar, editor, dashboard, modal, dan lock screen.
+- `src/services/storage.ts`: adapter penyimpanan browser dan Tauri.
+- `src/types/`: definisi tipe data.
+- `src-tauri/`: konfigurasi dan kode runtime desktop.
+- `context.md`: konteks teknis dan panduan singkat untuk pengembangan lanjutan.
+
+## Catatan Keamanan
+
+PIN berfungsi sebagai pengunci akses lokal, bukan enkripsi. Data jurnal tidak dienkripsi oleh aplikasi. Jangan menganggap PIN sebagai perlindungan terhadap akses langsung ke file AppData atau storage browser.
